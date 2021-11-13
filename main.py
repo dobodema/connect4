@@ -1,4 +1,4 @@
-# Connect 4 devoir maison
+# PROJET NSI: LE PUISSANCE 4
 
 def grille_vide(n,m):
     return[[0 for i in range(n)]for j in range(m)]
@@ -15,9 +15,9 @@ def input_int(str, min, max):
         try:
             ch = int(input(str))
             if ch < min or ch > max:
-                print('erreur choix entre', min, 'et', max)
+                print('Erreur choix est entre', min, 'et', max)
         except ValueError:
-            print('erreur choix entre', min, 'et', max)
+            print('Erreur le choix est entre', min, 'et', max)
     return ch
 
 
@@ -38,7 +38,7 @@ def affichage_grille(t):
 
 
 def grille_complete(t):
-    # TODO check if grille is full, if so return True (or rather return False as soon as a space (0) is found
+    # verifie si la grille est pleine, si oui return True (ou sinon return False des que un espace (0) est trouvé
     for i in range (len(t[0])-1,-1, -1):
         for j in range(len(t)):
             if t[j][i] == 0:
@@ -46,23 +46,23 @@ def grille_complete(t):
     return True
 
 def joueur(p):
-    # toggle player
+    # bascule le joueur
     return 2 if p == 1 else 1
 
 
 def jouer(p, grille):
-    # TODO choose
+    # choisir la colonne
     global nomC, nomR
-    print(f'joueur {p} a jouer')
+    print(f'C\'EST AU JOUEUR {p} A JOUER')
     while True:
-        # todo cope with non-numeric
-        col = input_int('enter col', 1, nomC)
+        #pour s'occuper des inputs non entiers
+        col = input_int('ENTREZ LA COLONNE:', 1, nomC)
         if col < 1 or col > nomC:
             print(f'Le numéro doit être entre 1 et {nomC}')
         else:
             col = col - 1
             if grille[col][nomR-1] != 0:
-                print(f'La colonne {col + 1} est pleine, veuiillez entrez une autres colonne')
+                print(f'La colonne {col + 1} est pleine, veuiillez entrez une autre colonne')
             else:
                 for r in range (len(grille[col])):
                     if grille[col][r] == 0:
@@ -70,26 +70,23 @@ def jouer(p, grille):
                         break
                 break
 
-    # TODO choose/verify column (loop)
-    # TODO do it
-
 
 def vertical4(p, grille):
     global nomC, nomR
-    # TODO true if 4 found, false otherwise
+    # true si on trouve 4 d'affilée, sinon False
     # pour toutes les colonnes tour a tour
     for c in range(len(grille)):
         # for rows 0 to (6 - 4)
         col = grille[c]
         for r in range(len(col) - 4):
-            # check start to start + 3
+            # Verifiez position jusqu'a position +3
             trouve = True
             for i in range(4) :
-                # if non-p set Trouve to False, break
+                # si ce n'est pas égal au joueur, mettre False, break
                 if grille[c][r+i] != p:
                     trouve = False
                     break
-            # end of loop if trouve return True
+            # fin de la boucle si 4 pions d'affilée sont trouvés, si oui return True
             if trouve :
                 return True
 
@@ -105,47 +102,47 @@ def flip(t):
 
 
 def horizontal(p, grille):
-    # TODO true if 4 found, false otherwise
-    # flip the grille
+    #  true si 4 d'affiléé sont trouvés, sinon false
+    # retourne la grille
     flipped = flip(grille)
     return vertical4(p,flipped)
 
 
 def diag_gauche(p, grille):
-    # TODO true if 4 found, false otherwise
+    # true si 4 trouvés, sinon false
     global nomC, nomR
     # pour toutes les colonnes tour a tour
     numCols = len(grille)
     for c in range(numCols - 4, numCols):
-        # for rows 0 to (6 - 4)
+        # pour les lignes de 0 à (6-4)
         col = grille[c]
         for r in range(len(col) - 4 + 1):
-            # check start to start + 3
+            # Verifiez position jusqu'a position +3
             trouve = True
             for i in range(4) :
-                # if non-p set Trouve to False, break
+                # si ce n'est pas égal au joueur, mettre False, break
                 if grille[c-i][r+i] != p:
                     trouve = False
                     break
-            # end of loop if trouve return True
+            # fin de la boucle si trouvé, return True
             if trouve :
                 return True
 
     return False
 
 
-def reverse(t):
+def mirroir(t):
     cols = len(t)
-    reversed = grille_vide(len(t[0]), cols)
-    # reverse the columns so 6 becomes 0, 5 becomes 1 etc
+    grille_mirroir = grille_vide(len(t[0]), cols)
+    # créé un mirroir des colonnes, donc 6 devient 0, et 5 devient 1 etc...
     for c in range(cols):
-        reversed[cols - 1 - c] = t[c]
-    return reversed
+        grille_mirroir[cols - 1 - c] = t[c]
+    return grille_mirroir
 
 
 def diag_droit(p, grille):
-    reversed = reverse(grille)
-    return diag_gauche(p, reversed)
+    grille_mirroir = mirroir(grille)
+    return diag_gauche(p, grille_mirroir)
 
 
 def victoire(p, grille):
@@ -159,13 +156,13 @@ def puissance4():
     while True:
         affichage_grille(grille)
         if grille_complete(grille) :
-            print('impasse/match nul')
+            print('IMPASSE/MATCH NUL')
             break
             
-        p = joueur(p) # or toggle p
+        p = joueur(p) # ou bascule joueur
         jouer(p, grille)
         if victoire(p, grille) :
-            print(f'joueur {p} a gagné')
+            print(f'FELICITATIONS LE JOUEUR {p} A GAGNE')
             affichage_grille(grille)
             break
 
