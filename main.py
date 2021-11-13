@@ -3,9 +3,10 @@
 def grille_vide(n,m):
     return[[0 for i in range(n)]for j in range(m)]
 
+# globals
 nomC = 7
 nomR = 6
-grille =()
+grille = ()
 
 
 def input_int(str, min, max):
@@ -61,7 +62,7 @@ def jouer(p, grille):
         else:
             col = col - 1
             if grille[col][nomR-1] != 0:
-                print(f'La colonne {nomC} est pleine, veuiillez entrez une autres colonne')
+                print(f'La colonne {col + 1} est pleine, veuiillez entrez une autres colonne')
             else:
                 for r in range (len(grille[col])):
                     if grille[col][r] == 0:
@@ -77,7 +78,7 @@ def vertical4(p, grille):
     global nomC, nomR
     # TODO true if 4 found, false otherwise
     # pour toutes les colonnes tour a tour
-    for c in range(len(grille) - 4):
+    for c in range(len(grille)):
         # for rows 0 to (6 - 4)
         col = grille[c]
         for r in range(len(col) - 4):
@@ -87,7 +88,7 @@ def vertical4(p, grille):
                 # if non-p set Trouve to False, break
                 if grille[c][r+i] != p:
                     trouve = False
-                    break;
+                    break
             # end of loop if trouve return True
             if trouve :
                 return True
@@ -96,7 +97,6 @@ def vertical4(p, grille):
 
 
 def flip(t):
-    # [len(t[0])][len(t)]
     flipped = grille_vide(len(t), len(t[0]))
     for i in range (len(t[0])-1,-1, -1):
         for j in range(len(t)):
@@ -104,21 +104,19 @@ def flip(t):
     return flipped
 
 
-
 def horizontal(p, grille):
     # TODO true if 4 found, false otherwise
     # flip the grille
-    flipped = flip(grille);
+    flipped = flip(grille)
     return vertical4(p,flipped)
 
 
 def diag_gauche(p, grille):
     # TODO true if 4 found, false otherwise
     global nomC, nomR
-    # TODO true if 4 found, false otherwise
     # pour toutes les colonnes tour a tour
     numCols = len(grille)
-    for c in range(numCols - 4 + 1, numCols):
+    for c in range(numCols - 4, numCols):
         # for rows 0 to (6 - 4)
         col = grille[c]
         for r in range(len(col) - 4 + 1):
@@ -128,40 +126,26 @@ def diag_gauche(p, grille):
                 # if non-p set Trouve to False, break
                 if grille[c-i][r+i] != p:
                     trouve = False
-                    break;
+                    break
             # end of loop if trouve return True
             if trouve :
                 return True
 
     return False
+
+
+def reverse(t):
+    cols = len(t)
+    reversed = grille_vide(len(t[0]), cols)
+    # reverse the columns so 6 becomes 0, 5 becomes 1 etc
+    for c in range(cols):
+        reversed[cols - 1 - c] = t[c]
+    return reversed
 
 
 def diag_droit(p, grille):
-    # TODO true if 4 found, false otherwise
-    # flip the grille
-    # flipped = flip(grille);
-    # return diag_gauche(p,flipped)
-    # TODO true if 4 found, false otherwise
-    global nomC, nomR
-    # TODO true if 4 found, false otherwise
-    # pour toutes les colonnes tour a tour
-    numCols = len(grille)
-    for c in range(numCols - 4 + 1):
-        # for rows 0 to (6 - 4)
-        col = grille[c]
-        for r in range(len(col) - 4 + 1):
-            # check start to start + 3
-            trouve = True
-            for i in range(4) :
-                # if non-p set Trouve to False, break
-                if grille[c+i][r+i] != p:
-                    trouve = False
-                    break;
-            # end of loop if trouve return True
-            if trouve :
-                return True
-
-    return False
+    reversed = reverse(grille)
+    return diag_gauche(p, reversed)
 
 
 def victoire(p, grille):
